@@ -27,7 +27,7 @@ class NotesCubit extends Cubit<NotesStates> {
 
   Future<List<Note>> getNotes() async {
     emit(NotesLoading());
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final jsonNotes = prefs.getStringList('notes') ?? [];
     notes = jsonNotes.map((e) => Note.fromJson(e)).toList();
