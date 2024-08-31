@@ -18,49 +18,46 @@ class NotesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NotesCubit()..getNotes(),
-      child: Scaffold(
-        appBar: AppAppBar(title: "Notes App"),
-        body: BlocBuilder<NotesCubit, NotesStates>(
-          builder: (context, state) {
-            final cubit = NotesCubit.of(context);
-            final notes = cubit.notes;
-            if (state is NotesLoading) {
-              return AppLoadingIndicator();
-            } else if (notes.isEmpty) {
-              return Center(
-                child: AppText(
-                  title: 'Start Adding your notes',
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  onTap: () => RouteUtils.push(context, AddNoteView()),
-                ),
-              );
-            }
-            return ListView.separated(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 110.height),
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                final note = notes[index];
-                return NoteCard(
-                  note: note,
-                  onDelete: () => cubit.deleteNote(note),
-                  onTap: () => RouteUtils.push(context, AddNoteView(note: note)),
-                );
-              },
-              separatorBuilder: (context, index) => SizedBox(height: 12.height),
+    return Scaffold(
+      appBar: AppAppBar(title: "Notes App"),
+      body: BlocBuilder<NotesCubit, NotesStates>(
+        builder: (context, state) {
+          final cubit = NotesCubit.of(context);
+          final notes = cubit.notes;
+          if (state is NotesLoading) {
+            return AppLoadingIndicator();
+          } else if (notes.isEmpty) {
+            return Center(
+              child: AppText(
+                title: 'Start Adding your notes',
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                onTap: () => RouteUtils.push(context, AddNoteView()),
+              ),
             );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => RouteUtils.push(context, AddNoteView()),
-          backgroundColor: AppColors.secondary,
-          foregroundColor: AppColors.white,
-          child: Icon(FontAwesomeIcons.plus),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          }
+          return ListView.separated(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 110.height),
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              final note = notes[index];
+              return NoteCard(
+                note: note,
+                onDelete: () => cubit.deleteNote(note),
+                onTap: () => RouteUtils.push(context, AddNoteView(note: note)),
+              );
+            },
+            separatorBuilder: (context, index) => SizedBox(height: 12.height),
+          );
+        },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => RouteUtils.push(context, AddNoteView()),
+        backgroundColor: AppColors.secondary,
+        foregroundColor: AppColors.white,
+        child: Icon(FontAwesomeIcons.plus),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

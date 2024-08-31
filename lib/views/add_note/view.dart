@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/core/datasources/notes.dart';
-import 'package:notes_app/core/extensions/num.dart';
-import 'package:notes_app/core/route_utils/route_utils.dart';
+import 'package:notes_app/views/notes/cubit.dart';
 import 'package:notes_app/widgets/app_app_bar.dart';
 import 'package:notes_app/widgets/app_button.dart';
 import 'package:notes_app/widgets/app_text_field.dart';
 
 import '../../core/models/note.dart';
+import '../../core/route_utils/route_utils.dart';
 
 class AddNoteView extends StatefulWidget {
   const AddNoteView({Key? key, this.note}) : super(key: key);
@@ -28,6 +27,7 @@ class _AddNoteViewState extends State<AddNoteView> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = NotesCubit.of(context);
     final isEditing = widget.note != null;
     return Scaffold(
       appBar: AppAppBar(title: isEditing ? "Edit Note" : "Add Note"),
@@ -50,10 +50,10 @@ class _AddNoteViewState extends State<AddNoteView> {
               return;
             }
             if (isEditing) {
-              NotesDatasource.instance.deleteNote(widget.note!);
+              cubit.deleteNote(widget.note!);
             }
-            NotesDatasource.instance.addNote(note);
-            RouteUtils.pop(context, note);
+            cubit.addNote(note);
+            RouteUtils.pop(context);
           },
         ),
       ),
